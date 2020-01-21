@@ -7,6 +7,7 @@ public class User {
     private String username;
     private String position;
     private String role;
+    private int department_id;
 
     public User(String username, String position, String role) {
         this.username = username;
@@ -44,6 +45,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public int getDepartment_id() {
+        return department_id;
+    }
+
+    public void setDepartment_id(int department_id) {
+        this.department_id = department_id;
     }
 
     @Override
