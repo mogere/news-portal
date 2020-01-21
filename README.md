@@ -1,4 +1,4 @@
-# Project Wildlife Tracker
+# Project Organizational News API
 ### Description
 This project provides a rest REST API for querying and retrieving scoped news and information. 
 there are news, articles and posts that are available to all employees in an organization. 
@@ -34,6 +34,16 @@ CREATE TABLE departments (id SERIAL PRIMARY KEY, name varchar, description VARCH
 CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR, position varchar, role VARCHAR, department_id INTEGER);
 
 CREATE DATABASE news_portal_test WITH TEMPLATE news_portal;
+
+### End Points
+|URL    |Description      | 
+|------------|------------------
+|/user/:userId | Get the user with the given ID from database|
+|/user/new|Add new user to DB|
+|/news/new|Add news item to DB|
+|/departments|Query DB for available departments|
+|/departments/new|Add new department to the DB|
+
 
 ## Want to propose any changes?
 - Fork repository

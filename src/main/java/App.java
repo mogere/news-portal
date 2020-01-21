@@ -58,8 +58,8 @@ public class App {
             return gson.toJson(newUser);
         });
 
-        get("/user/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
-            int userId = Integer.parseInt(req.params("id"));
+        get("/user/:userId", "application/json", (req, res) -> { //accept a request in format JSON from an app
+            int userId = Integer.parseInt(req.params("userId"));
             User userToFind = usersDao.getUserInfo(userId);
 
             if (userToFind == null){
