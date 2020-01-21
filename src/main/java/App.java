@@ -1,8 +1,11 @@
 import com.google.gson.Gson;
+import exception.ApiException;
 import models.Department;
 import models.News;
+import models.User;
 import models.dao.Sql2oDepartmentDao;
 import models.dao.Sql2oNewsDao;
+import models.dao.Sql2oUserDao;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import static spark.Spark.*;
@@ -14,6 +17,7 @@ public class App {
     public static void main(String[] args) {
         Sql2oDepartmentDao departmentsDao;
         Sql2oNewsDao newsDao;
+        Sql2oUserDao usersDao;
         Connection conn;
         Gson gson = new Gson();
 
@@ -23,6 +27,7 @@ public class App {
 
         departmentsDao = new Sql2oDepartmentDao(sql2o);
         newsDao = new Sql2oNewsDao(sql2o);
+        usersDao = new Sql2oUserDao(sql2o);
 
         //add new department
         post("/departments/new", "application/json", (req, res) -> {
@@ -45,7 +50,40 @@ public class App {
             return gson.toJson(newsItem);
         });
 
+        //add new user
+        post("/user/new", "application/json", (req, res) -> {
+            User newUser = gson.fromJson(req.body(), User.class);
+            usersDao.add(newUser);
+            res.status(201);
+            return gson.toJson(newUser);
+        });
+
+        get("/user/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
+            int userId = Integer.parseInt(req.params("id"));
+            User userToFind = usersDao.getUserInfo(userId);
+
+            if (userToFind == null){
+                throw new ApiException(404, String.format("No restaurant with the id: \"%s\" exists", req.params("id")));
+            }
+
+            return gson.toJson(userToFind);
+        });
+
+
+
         //FILTERS
+
+        exception(ApiException.class, (exc, req, res) -> {
+            ApiException err = (ApiException) exc;
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put("status", err.getStatusCode());
+            jsonMap.put("errorMessage", err.getMessage());
+            res.type("application/json"); //after does not run in case of an exception.
+            res.status(err.getStatusCode()); //set the status
+            res.body(gson.toJson(jsonMap));  //set the output.
+        });
+
+
         after((req, res) ->{
             res.type("application/json");
         });
