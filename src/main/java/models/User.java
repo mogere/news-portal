@@ -9,10 +9,11 @@ public class User {
     private String role;
     private int department_id;
 
-    public User(String username, String position, String role) {
+    public User(String username, String position, String role, int departmentId) {
         this.username = username;
         this.position = position;
         this.role = role;
+        this.department_id = departmentId;
     }
 
     public int getUserId() {
