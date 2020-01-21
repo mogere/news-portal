@@ -1,8 +1,11 @@
 package models.dao;
 
 import models.User;
+import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+import org.sql2o.Sql2oException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sql2oUserDao implements UserDao {
@@ -14,21 +17,45 @@ public class Sql2oUserDao implements UserDao {
 
     @Override
     public void add(User user) {
-
+        String sql = "INSERT INTO users (name, position, role, department_id) VALUES (:name, :position, :role, :department_id)";
+        try(Connection con = sql2o.open()){
+            int id = (int) con.createQuery(sql, true)
+                    .bind(user)
+                    .executeUpdate()
+                    .getKey();
+            user.setUserId(id);
+        }
+        catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override
     public List<User> getAll() {
-        return null;
+        try(Connection con = sql2o.open()){
+            return con.createQuery("SELECT * FROM users")
+                    .executeAndFetch(User.class);
+        }
     }
 
     @Override
     public List<User> getAllUsersInDepartment(int departmentId) {
-        return null;
+        List<User> allDeptUsers = new ArrayList<>();
+        try (Connection con = sql2o.open()) {
+            allDeptUsers.add(con.createQuery("SELECT * FROM users WHERE department_id = :id")
+                    .addParameter("id", departmentId)
+                    .executeAndFetchFirst(User.class));
+        }
+        return allDeptUsers;
     }
 
     @Override
     public User getUserInfo(int userId) {
-        return null;
+        String sql = "SELECT * FROM users WHERE userId = :id";
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                    .addParameter("id", userId )
+                    .executeAndFetchFirst(User.class);
+        }
     }
 }
