@@ -3,33 +3,33 @@ package models;
 import java.util.Objects;
 
 public class User {
-    private int userId;
-    private String username;
+    private int id;
+    private String name;
     private String position;
     private String role;
     private int department_id;
 
     public User(String username, String position, String role, int departmentId) {
-        this.username = username;
+        this.name = username;
         this.position = position;
         this.role = role;
         this.department_id = departmentId;
     }
 
     public int getUserId() {
-        return userId;
+        return id;
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.id = userId;
     }
 
     public String getUsername() {
-        return username;
+        return name;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.name = username;
     }
 
     public String getPosition() {
@@ -61,14 +61,14 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId == user.userId &&
-                Objects.equals(username, user.username) &&
+        return id == user.id &&
+                Objects.equals(name, user.name) &&
                 Objects.equals(position, user.position) &&
                 Objects.equals(role, user.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, position, role);
+        return Objects.hash(id, name, position, role);
     }
 }

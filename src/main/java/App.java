@@ -70,6 +70,8 @@ public class App {
         });
 
 
+        //Get all users in department
+
 
         //FILTERS
 
